@@ -1,15 +1,10 @@
 package com.wordpress.ilyaps.model;
 
-import java.util.Date;
-
-/**
- * Created by ilyaps on 13.04.16.
- */
 public class Coor {
     private long id;
     private double  longitude;
     private double  latitude;
-    private Date date;
+    private String date;
 
     public long getId() {
         return id;
@@ -35,11 +30,21 @@ public class Coor {
         this.latitude = latitude;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Coor{" +
+                "id=" + id +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", date='" + date + '\'' +
+                '}';
     }
 }

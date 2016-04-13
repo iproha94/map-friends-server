@@ -31,20 +31,6 @@ public class Main {
     private static final String PROPERTIES_FILE_DB = "cfg/db.properties";
     private static final String PROPERTIES_FILE_SERVER = "cfg/server.properties";
 
-    private static final List<String> LIST_PROPERIES_SERVER = new ArrayList<>(Arrays.asList(
-            "host",
-            "port",
-            "get_coor",
-            "push_coor")
-    );
-
-    private static final List<String> LIST_PROPERIES_DB = new ArrayList<>(Arrays.asList(
-            "name_driver",
-            "jdbc_url",
-            "user_name",
-            "user_password")
-    );
-
     public static void main(String[] args) {
         LOGGER.info("start of activation of server");
 

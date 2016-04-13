@@ -1,6 +1,7 @@
 package com.wordpress.ilyaps.servlets;
 
 import com.wordpress.ilyaps.db.CoorDAO;
+import com.wordpress.ilyaps.model.Coor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ilyaps on 11.04.16.
@@ -30,6 +34,18 @@ public class GetCoorServlet extends HttpServlet {
         resp.setContentType("text/html; charset=UTF-8");
         req.setCharacterEncoding("UTF-8");
 
-        pw.println("hello, this is doGet by GetCoorServlets");
+        int id = new Integer(req.getParameter("id"));
+
+        List<Coor> coors = new ArrayList<>();
+        try {
+            coors = coorDAO.read(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        for (Coor coor : coors) {
+            pw.println(coor);
+        }
+
     }
 }
