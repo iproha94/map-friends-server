@@ -2,6 +2,7 @@ package com.wordpress.ilyaps;
 
 import com.wordpress.ilyaps.db.CoorDAO;
 import com.wordpress.ilyaps.db.DBService;
+import com.wordpress.ilyaps.helpers.PropertiesHelper;
 import com.wordpress.ilyaps.servlets.GetCoorServlet;
 import com.wordpress.ilyaps.servlets.PushCoorServlet;
 import org.apache.logging.log4j.LogManager;
@@ -14,17 +15,9 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.Servlet;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by ilyaps on 11.04.16.
- */
 public class Main {
     static final Logger LOGGER = LogManager.getLogger(Main.class);
 
@@ -32,31 +25,18 @@ public class Main {
     private static final String PROPERTIES_FILE_SERVER = "cfg/server.properties";
 
     public static void main(String[] args) {
-        LOGGER.info("start of activation of server");
+        LOGGER.info("start of main of server");
 
-        FileInputStream fisDB = null;
-        FileInputStream fisServer = null;
-        Properties propertiesDB = null;
-        Properties propertiesServer = null;
-        try {
-            fisDB = new FileInputStream(PROPERTIES_FILE_DB);
-            propertiesDB = new Properties();
-            propertiesDB.load(fisDB);
-
-            fisServer = new FileInputStream(PROPERTIES_FILE_SERVER);
-            propertiesServer = new Properties();
-            propertiesServer.load(fisServer);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.close();
-        }
+        Properties propertiesDB = PropertiesHelper.getProperties(PROPERTIES_FILE_DB);
+        Properties propertiesServer = PropertiesHelper.getProperties(PROPERTIES_FILE_SERVER);
 
         DBService dbService = new DBService(propertiesDB);
-        CoorDAO coorDAO = new CoorDAO(dbService.openConnection());
+        CoorDAO coorDAO = new CoorDAO(dbService);
         try {
             coorDAO.createTable();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Error creating table Coor", e);
+            System.out.close();
         }
 
         Servlet pushCoorServlet = new PushCoorServlet(coorDAO);
@@ -75,24 +55,11 @@ public class Main {
         handlers.setHandlers(new Handler[]{resourceHandler, context});
         server.setHandler(handlers);
 
-
-        try {
-            fisDB.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            fisServer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         try {
             server.start();
             LOGGER.info("Server is started");
         } catch (Exception e) {
-            LOGGER.error("Server isn't started");
-            LOGGER.error(e);
+            LOGGER.error("Server isn't started", e);
         }
     }
 }

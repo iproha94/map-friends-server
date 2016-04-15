@@ -2,6 +2,10 @@ package com.wordpress.ilyaps.servlets;
 
 import com.wordpress.ilyaps.db.CoorDAO;
 import com.wordpress.ilyaps.model.Coor;
+import com.wordpress.ilyaps.model.CoorResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +17,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ilyaps on 11.04.16.
- */
 public class GetCoorServlet extends HttpServlet {
-    private CoorDAO coorDAO;
+    static final Logger LOGGER = LogManager.getLogger(GetCoorServlet.class);
+    private static final int OK = 200;
+    private static final int ERROR = 404;
+
+    private final CoorDAO coorDAO;
 
     public GetCoorServlet(CoorDAO coorDAO) {
         this.coorDAO = coorDAO;
@@ -31,21 +36,36 @@ public class GetCoorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
-        resp.setContentType("text/html; charset=UTF-8");
+        resp.setContentType("application/json; charset=UTF-8");
         req.setCharacterEncoding("UTF-8");
 
-        int id = new Integer(req.getParameter("id"));
+        String idStr = req.getParameter("id");
+        LOGGER.info("get query with id = " + idStr);
 
-        List<Coor> coors = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        CoorResponse cr = new CoorResponse();
+
+        Integer id;
+        try {
+            id = new Integer(idStr);
+        } catch (NumberFormatException e) {
+            cr.setStatus(ERROR);
+            pw.print(mapper.writeValueAsString(cr));
+            return;
+        }
+
+        List<Coor> coors;
         try {
             coors = coorDAO.read(id);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.warn("SQLException", e);
+            coors = new ArrayList<>();
         }
 
-        for (Coor coor : coors) {
-            pw.println(coor);
-        }
+        cr.setCoors(coors);
+        cr.setId(id);
+        cr.setStatus(OK);
 
+        pw.print(mapper.writeValueAsString(cr));
     }
 }

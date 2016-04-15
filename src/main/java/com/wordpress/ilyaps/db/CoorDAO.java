@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class CoorDAO {
     static final Logger LOGGER = LogManager.getLogger(CoorDAO.class);
-    private final Connection connection;
+    private final DBService service;
 
-    public CoorDAO(Connection connection) {
-        this.connection = connection;
+    public CoorDAO(DBService service) {
+        this.service = service;
     }
 
     public void createTable() throws SQLException {
@@ -29,7 +29,11 @@ public class CoorDAO {
                 ") " +
                 "ENGINE = InnoDB;";
 
+        LOGGER.info("Run query: " + query);
+
+        Connection connection = service.openConnection();
         DBExecutor.execUpdate(connection, query);
+        connection.close();
     }
 
     public int insert(Coor coor) throws SQLException {
@@ -40,12 +44,23 @@ public class CoorDAO {
                 + " '" + coor.getDate() + "' " +
                 " )";
 
-        return DBExecutor.execUpdate(connection, query);
+        LOGGER.info("Run query: " + query);
+
+        Connection connection = service.openConnection();
+        int num = DBExecutor.execUpdate(connection, query);
+        connection.close();
+
+        return num;
     }
 
     public List<Coor> read(int id) throws SQLException {
         List<Coor> list = new ArrayList<>();
         String query = "select * from coor where id = " + id + " ;";
+
+        LOGGER.info("Run query: " + query);
+
+        Connection connection = service.openConnection();
+
         DBExecutor.execQuery(connection, query,
                 result -> {
                     while (result.next()) {
@@ -59,6 +74,7 @@ public class CoorDAO {
                     return null;
                 });
 
+        connection.close();
         return list;
     }
 }

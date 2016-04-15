@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.Random;
 
 public class PushCoorServlet extends HttpServlet {
     private CoorDAO coorDAO;
@@ -48,6 +46,6 @@ public class PushCoorServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        pw.println("hello, this is doGet by PushCoorServlet");
+        pw.println("you push coor " + req.getParameter("id"));
     }
 }
