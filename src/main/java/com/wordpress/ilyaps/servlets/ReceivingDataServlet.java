@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.wordpress.ilyaps.message.*;
 import com.wordpress.ilyaps.model.Coor;
+import com.wordpress.ilyaps.model.CoorMysql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,7 +58,7 @@ public class ReceivingDataServlet extends HttpServlet {
         String jsonResponseMsg;
 
         try {
-            Coor coor = new Coor();
+            Coor coor = new CoorMysql();
 
             coor.setId(new Integer(req.getParameter("id")));
             coor.setLongitude(new Integer(req.getParameter("longitude")));

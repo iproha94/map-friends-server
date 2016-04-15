@@ -3,7 +3,7 @@ package com.wordpress.ilyaps.model;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class Coor {
+public abstract class Coor {
     private long id;
     private double  longitude;
     private double  latitude;
@@ -37,17 +37,13 @@ public class Coor {
         return date;
     }
 
-    public Timestamp getMysqlDate() {
-        return new Timestamp(date.getTime());
-    }
+    public abstract <T> T getDataBaseDate();
 
     public void setDate(Date date) {
         this.date = date;
     }
 
-    public void setMysqlDate(Timestamp date) {
-        this.date = new Date(date.getTime());
-    }
+    public abstract <T> void setDataBaseDate(T date);
 
     @Override
     public String toString() {
