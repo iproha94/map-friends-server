@@ -20,6 +20,16 @@ public class CoorDAO {
         this.service = service;
     }
 
+    public void dropTable() throws SQLException {
+        String query = "drop TABLE IF EXISTS coor";
+
+        LOGGER.info("Run query: " + query);
+
+        Connection connection = service.openConnection();
+        DBExecutor.execUpdate(connection, query);
+        connection.close();
+    }
+
     public void createTable() throws SQLException {
         String query = "CREATE TABLE IF NOT EXISTS coor ( " +
                 "  id INT NOT NULL, " +
@@ -37,11 +47,11 @@ public class CoorDAO {
     }
 
     public int insert(Coor coor) throws SQLException {
-        String query = "insert into coor (id, longitude, latitude, date) values ( " +
+        String query = "insert into coor (id, latitude, longitude, date) values ( " +
                 + coor.getId() + " ,  "
                 + coor.getLatitude() + " ,  "
                 + coor.getLongitude() + " ,  "
-                + " '" + coor.getDate() + "' " +
+                + " '" + coor.getMysqlDate() + "' " +
                 " )";
 
         LOGGER.info("Run query: " + query);
@@ -65,7 +75,7 @@ public class CoorDAO {
                 result -> {
                     while (result.next()) {
                         Coor coor = new Coor();
-                        coor.setDate(result.getString("date"));
+                        coor.setMysqlDate(result.getTimestamp("date"));
                         coor.setId(result.getInt("id"));
                         coor.setLatitude(result.getDouble("latitude"));
                         coor.setLongitude(result.getDouble("longitude"));

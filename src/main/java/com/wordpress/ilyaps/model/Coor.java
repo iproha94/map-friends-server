@@ -1,10 +1,13 @@
 package com.wordpress.ilyaps.model;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 public class Coor {
     private long id;
     private double  longitude;
     private double  latitude;
-    private String date;
+    private Date date;
 
     public long getId() {
         return id;
@@ -30,12 +33,20 @@ public class Coor {
         this.latitude = latitude;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public Timestamp getMysqlDate() {
+        return new Timestamp(date.getTime());
+    }
+
+    public void setDate(Date date) {
         this.date = date;
+    }
+
+    public void setMysqlDate(Timestamp date) {
+        this.date = new Date(date.getTime());
     }
 
     @Override
@@ -47,4 +58,5 @@ public class Coor {
                 ", date='" + date + '\'' +
                 '}';
     }
+
 }

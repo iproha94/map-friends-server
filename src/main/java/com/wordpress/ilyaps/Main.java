@@ -3,8 +3,9 @@ package com.wordpress.ilyaps;
 import com.wordpress.ilyaps.db.CoorDAO;
 import com.wordpress.ilyaps.db.DBService;
 import com.wordpress.ilyaps.helpers.PropertiesHelper;
-import com.wordpress.ilyaps.servlets.GetCoorServlet;
-import com.wordpress.ilyaps.servlets.PushCoorServlet;
+import com.wordpress.ilyaps.servlets.DropDBServlet;
+import com.wordpress.ilyaps.servlets.SendingDataServlet;
+import com.wordpress.ilyaps.servlets.ReceivingDataServlet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
@@ -39,20 +40,21 @@ public class Main {
             System.out.close();
         }
 
-        Servlet pushCoorServlet = new PushCoorServlet(coorDAO);
-        Servlet getCoorServlet = new GetCoorServlet(coorDAO);
+        Servlet receivingDataServlet = new ReceivingDataServlet(coorDAO);
+        Servlet sendingDataServlet = new SendingDataServlet(coorDAO);
+        Servlet dropDBServlet = new DropDBServlet(coorDAO);
 
         final ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(pushCoorServlet), propertiesServer.getProperty("push_coor"));
-        context.addServlet(new ServletHolder(getCoorServlet), propertiesServer.getProperty("get_coor"));
+        context.addServlet(new ServletHolder(receivingDataServlet), propertiesServer.getProperty("data_to_server"));
+        context.addServlet(new ServletHolder(sendingDataServlet), propertiesServer.getProperty("data_from_server"));
+        context.addServlet(new ServletHolder(dropDBServlet), propertiesServer.getProperty("drop_db"));
 
         final ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirectoriesListed(true);
-        resourceHandler.setResourceBase("static");
 
-        final Server server = new Server(new Integer(propertiesServer.getProperty("port")));
         final HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[]{resourceHandler, context});
+
+        final Server server = new Server(new Integer(propertiesServer.getProperty("port")));
         server.setHandler(handlers);
 
         try {

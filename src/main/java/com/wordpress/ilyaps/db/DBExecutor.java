@@ -5,9 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * Created by ilyap on 23.11.2015.
- */
 public class DBExecutor {
 
     public static <T> T execQuery( Connection connection,
