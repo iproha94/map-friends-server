@@ -1,7 +1,6 @@
 package com.wordpress.ilyaps.db;
 
 import com.wordpress.ilyaps.model.Coor;
-import com.wordpress.ilyaps.model.CoorMysql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,7 +74,7 @@ public class CoorDAO {
         DBExecutor.execQuery(connection, query,
                 result -> {
                     while (result.next()) {
-                        Coor coor = new CoorMysql();
+                        Coor coor = new Coor();
                         coor.setDataBaseDate(result.getTimestamp("date"));
                         coor.setId(result.getInt("id"));
                         coor.setLatitude(result.getDouble("latitude"));

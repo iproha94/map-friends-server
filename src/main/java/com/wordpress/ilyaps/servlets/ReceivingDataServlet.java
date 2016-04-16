@@ -8,7 +8,6 @@ import java.util.Date;
 
 import com.wordpress.ilyaps.message.*;
 import com.wordpress.ilyaps.model.Coor;
-import com.wordpress.ilyaps.model.CoorMysql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,7 +39,7 @@ public class ReceivingDataServlet extends HttpServlet {
             LOGGER.info("(doPost) jsonDataMsg = " + jsonDataMsg.getId());
             LOGGER.info("(doPost) jsonDataMsg = " + jsonDataMsg.getCoors());
 
-            List<CoorMysql> coors =  jsonDataMsg.getCoors();
+            List<Coor> coors =  jsonDataMsg.getCoors();
             int count = putDataToDB(coors);
 
             jsonResponseMsg = new Gson().toJson(new StatusMsg(Status.OK, count));
@@ -60,7 +59,7 @@ public class ReceivingDataServlet extends HttpServlet {
         String jsonResponseMsg;
 
         try {
-            CoorMysql coor = new CoorMysql();
+            Coor coor = new Coor();
 
             coor.setId(new Integer(req.getParameter("id")));
             coor.setLongitude(new Integer(req.getParameter("longitude")));
@@ -81,7 +80,7 @@ public class ReceivingDataServlet extends HttpServlet {
         resp.getWriter().write(jsonResponseMsg);
     }
 
-    private int putDataToDB(List<CoorMysql> coors) {
+    private int putDataToDB(List<Coor> coors) {
         int count = 0;
         for (Coor coor : coors) {
             count += putCoorToDB(coor);

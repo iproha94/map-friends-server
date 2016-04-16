@@ -1,15 +1,15 @@
 package com.wordpress.ilyaps.message;
 
-import com.wordpress.ilyaps.model.CoorMysql;
+import com.wordpress.ilyaps.model.Coor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class  DataMsg {
     long id;
-    List<CoorMysql> coors;
+    List<Coor> coors;
 
-    public DataMsg(long id, List<CoorMysql> coors) {
+    public DataMsg(long id, List<Coor> coors) {
         this.id = id;
         this.coors = coors;
     }
@@ -19,11 +19,11 @@ public class  DataMsg {
         coors = new ArrayList<>();
     }
 
-    public List<CoorMysql> getCoors() {
+    public List<Coor> getCoors() {
         return coors;
     }
 
-    public void setCoors(List<CoorMysql> coors) {
+    public void setCoors(List<Coor> coors) {
         this.coors = coors;
     }
 
