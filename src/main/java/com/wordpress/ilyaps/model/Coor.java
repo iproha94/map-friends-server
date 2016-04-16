@@ -1,6 +1,5 @@
 package com.wordpress.ilyaps.model;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 public abstract class Coor {

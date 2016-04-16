@@ -37,9 +37,11 @@ public class ReceivingDataServlet extends HttpServlet {
 
         try {
             DataMsg jsonDataMsg = gson.fromJson(req.getReader(), DataMsg.class);
-            LOGGER.info("(doPost)get query with id = " + jsonDataMsg);
+            LOGGER.info("(doPost) jsonDataMsg = " + jsonDataMsg.getId());
+            LOGGER.info("(doPost) jsonDataMsg = " + jsonDataMsg.getCoors());
 
-            int count = putDataToDB(jsonDataMsg.getCoors());
+            List<CoorMysql> coors =  jsonDataMsg.getCoors();
+            int count = putDataToDB(coors);
 
             jsonResponseMsg = new Gson().toJson(new StatusMsg(Status.OK, count));
         } catch (JsonSyntaxException e) {
@@ -58,7 +60,7 @@ public class ReceivingDataServlet extends HttpServlet {
         String jsonResponseMsg;
 
         try {
-            Coor coor = new CoorMysql();
+            CoorMysql coor = new CoorMysql();
 
             coor.setId(new Integer(req.getParameter("id")));
             coor.setLongitude(new Integer(req.getParameter("longitude")));
@@ -79,7 +81,7 @@ public class ReceivingDataServlet extends HttpServlet {
         resp.getWriter().write(jsonResponseMsg);
     }
 
-    private int putDataToDB(List<Coor> coors) {
+    private int putDataToDB(List<CoorMysql> coors) {
         int count = 0;
         for (Coor coor : coors) {
             count += putCoorToDB(coor);

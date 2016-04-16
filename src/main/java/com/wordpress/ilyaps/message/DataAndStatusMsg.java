@@ -1,13 +1,13 @@
 package com.wordpress.ilyaps.message;
 
-import com.wordpress.ilyaps.model.Coor;
+import com.wordpress.ilyaps.model.CoorMysql;
 
 import java.util.List;
 
-public class DataAndStatusMsg extends DataMsg {
+public  class DataAndStatusMsg  extends DataMsg {
     private int status = Status.ERROR;
 
-    public DataAndStatusMsg(int id, List<Coor> coors, int status) {
+    public DataAndStatusMsg(int id, List<CoorMysql> coors, int status) {
         super(id, coors);
         this.status = status;
     }
