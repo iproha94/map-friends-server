@@ -9,6 +9,9 @@ public class Coor {
     private double  latitude;
     private Date date;
 
+    public Coor() {
+    }
+
     public long getId() {
         return id;
     }
